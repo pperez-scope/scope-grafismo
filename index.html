@@ -7,7 +7,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-html, body { margin: 0; padding: 0; background: #F6FAF9; }
+html, body { margin: 0; padding: 0; background: #F6FAF9; overflow-x: hidden; }
 body { padding: 12px; }
 @media (min-width: 700px) { body { padding: 32px 16px; } }
 
@@ -193,7 +193,7 @@ body { padding: 12px; }
   align-items: end;
   margin-bottom: 28px;
 }
-#ph-root .ph-field { display: flex; flex-direction: column; gap: 5px; }
+#ph-root .ph-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 #ph-root .ph-field label {
   font-size: 10.5px;
   letter-spacing: 0.06em;
@@ -209,6 +209,8 @@ body { padding: 12px; }
   border-radius: var(--radius);
   background: var(--paper-card);
   color: var(--ink);
+  width: 100%;
+  min-width: 0;
 }
 #ph-root input:focus, #ph-root select:focus {
   outline: 2px solid var(--accent);
@@ -380,12 +382,13 @@ body { padding: 12px; }
 
 @media (max-width: 640px) {
   #ph-root .ph-form {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 12px;
     background: var(--paper-card);
     border: 1px solid var(--line);
     border-radius: var(--radius);
     padding: 16px 14px;
+    width: 100%;
   }
   #ph-root .ph-form .ph-field:nth-child(1) { order: 1; }
   #ph-root .ph-form .ph-field:nth-child(3) { order: 2; }
