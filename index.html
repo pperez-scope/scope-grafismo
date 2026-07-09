@@ -390,8 +390,46 @@ body { padding: 12px; }
   #ph-root .ph-filters { flex-direction: column; }
   #ph-root .ph-filters select, #ph-root .ph-filters input { width: 100%; }
   #ph-root .ph-tab { padding: 12px 12px 10px 12px; font-size: 13px; flex: 1; justify-content: center; }
-  #ph-root .ph-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -16px; padding: 0 16px; }
-  #ph-root table { min-width: 560px; }
+  #ph-root .ph-table-scroll { margin: 0; padding: 0; }
+  #ph-root table { min-width: 0; width: 100%; }
+  #ph-root thead { display: none; }
+  #ph-root tbody { display: block; }
+  #ph-root tr {
+    display: block;
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 4px 12px;
+    margin-bottom: 10px;
+  }
+  #ph-root tr:hover td { background: none; }
+  #ph-root td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+    text-align: right;
+  }
+  #ph-root td:last-child { border-bottom: none; }
+  #ph-root td::before {
+    content: attr(data-label);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+    text-align: left;
+    flex-shrink: 0;
+  }
+  #ph-root td[data-label=""]::before { content: none; }
+  #ph-root td[data-label=""] { justify-content: flex-end; }
+  #ph-root td:empty { display: none; }
+  #ph-root .ph-total-row { background: var(--accent-soft); border: 1px solid var(--accent); }
+  #ph-root .ph-total-row td { font-weight: 700; border-top: none; border-bottom: none; }
   #ph-root .ph-add-btn { padding: 13px 18px; font-size: 14px; }
   #ph-root input, #ph-root select { padding: 11px 10px; font-size: 16px; }
 }
@@ -628,12 +666,12 @@ function renderTable() {
     const g = GRAFISTAS.find(x => x.id === e.grafista);
     return `
       <tr data-id="${e.id}">
-        <td class="ph-mono">${e.fecha}</td>
-        <td><span class="ph-person-dot" style="background:${COLOR_HEX[e.grafista]}"></span>${g ? g.nombre : e.grafista}</td>
-        <td>${escapeHtml(e.cliente)}</td>
-        <td class="ph-mono">${Number(e.horas).toFixed(2)}</td>
-        <td>${escapeHtml(e.nota || '')}</td>
-        <td><button class="ph-del" data-id="${e.id}" title="Eliminar">✕</button></td>
+        <td class="ph-mono" data-label="Fecha">${e.fecha}</td>
+        <td data-label="Grafista"><span class="ph-person-dot" style="background:${COLOR_HEX[e.grafista]}"></span>${g ? g.nombre : e.grafista}</td>
+        <td data-label="Cliente">${escapeHtml(e.cliente)}</td>
+        <td class="ph-mono" data-label="Horas">${Number(e.horas).toFixed(2)}</td>
+        <td data-label="Nota">${escapeHtml(e.nota || '')}</td>
+        <td data-label=""><button class="ph-del" data-id="${e.id}" title="Eliminar">✕</button></td>
       </tr>`;
   }).join('');
 
@@ -649,7 +687,7 @@ function renderTable() {
         ${rows}
         <tr class="ph-total-row">
           <td colspan="3">Total filtrado</td>
-          <td class="ph-mono">${total.toFixed(2)}</td>
+          <td class="ph-mono" data-label="Total">${total.toFixed(2)}</td>
           <td colspan="2"></td>
         </tr>
       </tbody>
