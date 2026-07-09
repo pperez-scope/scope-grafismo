@@ -1,0 +1,720 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+#ph-root {
+  --paper: #F6FAF9;
+  --paper-card: #FFFFFF;
+  --ink: #1B2B29;
+  --ink-soft: #5B726E;
+  --line: #DCEAE7;
+  --santi: #2E7D74;
+  --santi-soft: #DCEEEA;
+  --joan: #E2582B;
+  --joan-soft: #FBE0D3;
+  --marta: #C16A3E;
+  --marta-soft: #F3E0D3;
+  --accent: var(--santi);
+  --accent-soft: var(--santi-soft);
+  --radius: 3px;
+
+  font-family: 'Inter', sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  border-radius: 6px;
+  padding: 0;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+#ph-root * { box-sizing: border-box; }
+
+#ph-root .ph-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ---- Header ---- */
+#ph-root .ph-header {
+  position: relative;
+  padding: 28px 32px 20px 32px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-card);
+}
+#ph-root .ph-regmark {
+  position: absolute;
+  width: 16px; height: 16px;
+  top: 14px;
+}
+#ph-root .ph-regmark svg { width: 100%; height: 100%; }
+#ph-root .ph-regmark.left { left: 14px; }
+#ph-root .ph-regmark.right { right: 14px; }
+#ph-root .ph-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#ph-root .ph-eyebrow .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--joan);
+  display: inline-block;
+}
+#ph-root .ph-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--santi);
+}
+#ph-root .ph-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+#ph-root .ph-live .pulse {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #2FAE64;
+  box-shadow: 0 0 0 0 rgba(47,174,100,0.6);
+  animation: ph-pulse 2s infinite;
+}
+@keyframes ph-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(47,174,100,0.5); }
+  70% { box-shadow: 0 0 0 6px rgba(47,174,100,0); }
+  100% { box-shadow: 0 0 0 0 rgba(47,174,100,0); }
+}
+
+/* ---- Ruler divider ---- */
+#ph-root .ph-ruler {
+  display: flex;
+  align-items: flex-end;
+  height: 20px;
+  padding: 0 32px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+#ph-root .ph-ruler .tick {
+  flex: 1 0 auto;
+  width: 1px;
+  height: 6px;
+  background: var(--line);
+  position: relative;
+}
+#ph-root .ph-ruler .tick.major { height: 12px; background: var(--ink-soft); }
+#ph-root .ph-ruler .tick.major::after {
+  content: attr(data-n);
+  position: absolute;
+  bottom: 14px;
+  left: -6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  color: var(--ink-soft);
+}
+
+/* ---- Tabs ---- */
+#ph-root .ph-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 32px;
+  background: var(--paper-card);
+  border-bottom: 1px solid var(--line);
+}
+#ph-root .ph-tab {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px 18px 12px 18px;
+  cursor: pointer;
+  color: var(--ink-soft);
+  border-bottom: 3px solid transparent;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#ph-root .ph-tab .swatch {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+#ph-root .ph-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+#ph-root .ph-tab:hover { color: var(--ink); }
+
+/* ---- Body ---- */
+#ph-root .ph-body { padding: 24px 32px 32px 32px; background: var(--paper); }
+
+#ph-root .ph-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#ph-root .ph-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* form */
+#ph-root .ph-form {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 0.8fr 1.4fr auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+#ph-root .ph-field { display: flex; flex-direction: column; gap: 5px; }
+#ph-root .ph-field label {
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+#ph-root input, #ph-root select {
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  color: var(--ink);
+}
+#ph-root input:focus, #ph-root select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+#ph-root input.ph-horas { font-family: 'JetBrains Mono', monospace; }
+#ph-root .ph-add-btn {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px 18px;
+  cursor: pointer;
+  white-space: nowrap;
+  height: fit-content;
+}
+#ph-root .ph-add-btn:hover { filter: brightness(1.08); }
+#ph-root .ph-add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* summary cards */
+#ph-root .ph-summary-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  background: var(--paper-card);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin-bottom: 14px;
+}
+#ph-root .ph-summary-top .who {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+}
+#ph-root .ph-summary-top .total {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--accent);
+}
+#ph-root .ph-summary-top .total span { font-size: 11px; color: var(--ink-soft); font-weight: 400; }
+
+#ph-root .ph-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  margin-bottom: 28px;
+}
+#ph-root .ph-card {
+  background: var(--paper-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+#ph-root .ph-card .name {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+#ph-root .ph-card .hrs-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+#ph-root .ph-card .hrs {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 600;
+}
+#ph-root .ph-card .hrs span { font-size: 11px; color: var(--ink-soft); font-weight: 400; }
+#ph-root .ph-card .pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+#ph-root .ph-bar-track {
+  width: 100%;
+  height: 5px;
+  background: var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+}
+#ph-root .ph-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+}
+#ph-root .ph-empty {
+  font-size: 13px;
+  color: var(--ink-soft);
+  padding: 16px;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+/* filters */
+#ph-root .ph-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+#ph-root .ph-filters select, #ph-root .ph-filters input {
+  font-size: 12.5px;
+  padding: 7px 8px;
+}
+
+/* table */
+#ph-root table { width: 100%; border-collapse: collapse; }
+#ph-root th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+#ph-root td {
+  padding: 9px 10px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+#ph-root td.ph-mono { font-family: 'JetBrains Mono', monospace; }
+#ph-root tr:hover td { background: var(--paper-card); }
+#ph-root .ph-person-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+#ph-root .ph-del {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 2px 6px;
+  border-radius: var(--radius);
+}
+#ph-root .ph-del:hover { color: var(--joan); background: var(--joan-soft); }
+
+#ph-root .ph-total-row td {
+  font-weight: 700;
+  border-top: 2px solid var(--ink);
+  border-bottom: none;
+}
+
+#ph-root .ph-loading, #ph-root .ph-config-error {
+  padding: 60px 32px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+}
+#ph-root .ph-config-error { color: var(--joan); }
+
+@media (max-width: 640px) {
+  #ph-root .ph-form { grid-template-columns: 1fr 1fr; }
+  #ph-root .ph-form .ph-field:nth-child(4) { grid-column: 1 / -1; }
+  #ph-root .ph-add-btn { grid-column: 1 / -1; }
+  #ph-root .ph-header, #ph-root .ph-body, #ph-root .ph-tabs { padding-left: 18px; padding-right: 18px; }
+  #ph-root .ph-ruler { padding: 0 18px; }
+}
+</style>
+
+<div id="ph-root">
+  <div id="ph-loading" class="ph-loading">Conectando con la base de datos…</div>
+  <div id="ph-config-error" class="ph-config-error" style="display:none;"></div>
+  <div id="ph-app" style="display:none;">
+    <div class="ph-header">
+      <div class="ph-regmark left"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="#1B2B29" stroke-width="1"/><line x1="10" y1="0" x2="10" y2="20" stroke="#1B2B29" stroke-width="1"/><line x1="0" y1="10" x2="20" y2="10" stroke="#1B2B29" stroke-width="1"/></svg></div>
+      <div class="ph-regmark right"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="#1B2B29" stroke-width="1"/><line x1="10" y1="0" x2="10" y2="20" stroke="#1B2B29" stroke-width="1"/><line x1="0" y1="10" x2="20" y2="10" stroke="#1B2B29" stroke-width="1"/></svg></div>
+      <p class="ph-eyebrow"><span class="dot"></span>Scope Producciones · Grafismo</p>
+      <h1 class="ph-title">Parte de horas</h1>
+      <div class="ph-live"><span class="pulse"></span>En directo · compartido entre Santi, Joan y Marta</div>
+    </div>
+    <div class="ph-ruler" id="ph-ruler"></div>
+    <div class="ph-tabs" id="ph-tabs"></div>
+    <div class="ph-body">
+
+      <p class="ph-section-label">Nueva entrada</p>
+      <div class="ph-form">
+        <div class="ph-field">
+          <label>Fecha</label>
+          <input type="date" id="ph-fecha" />
+        </div>
+        <div class="ph-field">
+          <label>Cliente</label>
+          <input type="text" id="ph-cliente" list="ph-clientes-list" placeholder="Nombre del cliente" />
+          <datalist id="ph-clientes-list"></datalist>
+        </div>
+        <div class="ph-field">
+          <label>Horas</label>
+          <input type="number" id="ph-horas" class="ph-horas" step="0.25" min="0" placeholder="0.00" />
+        </div>
+        <div class="ph-field">
+          <label>Nota (opcional)</label>
+          <input type="text" id="ph-nota" placeholder="Ej. revisión de logotipo" />
+        </div>
+        <button class="ph-add-btn" id="ph-add-btn">+ Añadir</button>
+      </div>
+
+      <p class="ph-section-label">Resumen · <span id="ph-summary-person"></span></p>
+      <div class="ph-summary-top" id="ph-summary-top"></div>
+      <div class="ph-summary" id="ph-summary"></div>
+
+      <p class="ph-section-label">Registros</p>
+      <div class="ph-filters">
+        <select id="ph-filter-grafista">
+          <option value="todos">Todos los grafistas</option>
+        </select>
+        <select id="ph-filter-cliente">
+          <option value="todos">Todos los clientes</option>
+        </select>
+        <input type="date" id="ph-filter-desde" title="Desde" />
+        <input type="date" id="ph-filter-hasta" title="Hasta" />
+      </div>
+      <div id="ph-table-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* =====================================================================
+   CONFIGURACIÓN DE FIREBASE
+   Sustituye los valores de abajo por los de TU proyecto de Firebase.
+   Instrucciones completas en el mensaje de Claude que acompaña este archivo.
+   ===================================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyBKDtPbLdBzTLYR-HNbnVBLEXj3e356rVY",
+  authDomain: "scope-grafismo.firebaseapp.com",
+  databaseURL: "https://scope-grafismo-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "scope-grafismo",
+  storageBucket: "scope-grafismo.firebasestorage.app",
+  messagingSenderId: "979917361090",
+  appId: "1:979917361090:web:8bc3f9073d8accc9cb505b"
+};
+/* ===================================================================== */
+
+const GRAFISTAS = [
+  { id: 'santi', nombre: 'Santi' },
+  { id: 'joan', nombre: 'Joan' },
+  { id: 'marta', nombre: 'Marta' },
+];
+const COLOR_HEX = { santi: '#2E7D74', joan: '#E2582B', marta: '#C16A3E' };
+
+let entries = [];
+let currentGrafista = 'santi';
+let db, entriesCol;
+const root = document.getElementById('ph-root');
+
+function todayISO() {
+  const d = new Date();
+  return d.toISOString().slice(0, 10);
+}
+
+function showConfigError() {
+  document.getElementById('ph-loading').style.display = 'none';
+  const err = document.getElementById('ph-config-error');
+  err.style.display = 'block';
+  err.innerHTML = 'Falta configurar Firebase.<br>Abre el archivo HTML, busca "firebaseConfig" y pega ahí los datos de tu proyecto de Firebase.';
+}
+
+function buildRuler() {
+  const ruler = document.getElementById('ph-ruler');
+  ruler.innerHTML = '';
+  for (let i = 0; i < 60; i++) {
+    const t = document.createElement('div');
+    t.className = 'tick' + (i % 5 === 0 ? ' major' : '');
+    if (i % 5 === 0) t.setAttribute('data-n', i);
+    ruler.appendChild(t);
+  }
+}
+
+function buildTabs() {
+  const tabs = document.getElementById('ph-tabs');
+  tabs.innerHTML = '';
+  GRAFISTAS.forEach(g => {
+    const btn = document.createElement('button');
+    btn.className = 'ph-tab' + (g.id === currentGrafista ? ' active' : '');
+    btn.innerHTML = `<span class="swatch" style="background:${COLOR_HEX[g.id]}"></span>${g.nombre}`;
+    btn.onclick = () => {
+      currentGrafista = g.id;
+      root.style.setProperty('--accent', COLOR_HEX[g.id]);
+      render();
+    };
+    tabs.appendChild(btn);
+  });
+}
+
+function uniqueClients() {
+  return [...new Set(entries.map(e => e.cliente))].sort((a, b) => a.localeCompare(b));
+}
+
+function updateClientDatalist() {
+  const dl = document.getElementById('ph-clientes-list');
+  dl.innerHTML = uniqueClients().map(c => `<option value="${escapeHtml(c)}">`).join('');
+}
+
+function updateFilterOptions() {
+  const fg = document.getElementById('ph-filter-grafista');
+  const currentFG = fg.value;
+  fg.innerHTML = '<option value="todos">Todos los grafistas</option>' +
+    GRAFISTAS.map(g => `<option value="${g.id}">${g.nombre}</option>`).join('');
+  fg.value = currentFG || 'todos';
+
+  const fc = document.getElementById('ph-filter-cliente');
+  const currentFC = fc.value;
+  fc.innerHTML = '<option value="todos">Todos los clientes</option>' +
+    uniqueClients().map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  if ([...fc.options].some(o => o.value === currentFC)) fc.value = currentFC;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+
+function renderSummary() {
+  const label = document.getElementById('ph-summary-person');
+  const g = GRAFISTAS.find(x => x.id === currentGrafista);
+  label.textContent = g.nombre;
+
+  const top = document.getElementById('ph-summary-top');
+  const wrap = document.getElementById('ph-summary');
+  const mine = entries.filter(e => e.grafista === currentGrafista);
+
+  if (mine.length === 0) {
+    top.innerHTML = `<span class="who">${g.nombre}</span><span class="total">0.00<span> h totales</span></span>`;
+    wrap.innerHTML = '<div class="ph-empty">Sin registros todavía para ' + g.nombre + '.</div>';
+    return;
+  }
+
+  const totals = {};
+  mine.forEach(e => { totals[e.cliente] = (totals[e.cliente] || 0) + Number(e.horas); });
+  const totalAll = mine.reduce((s, e) => s + Number(e.horas), 0);
+
+  top.innerHTML = `<span class="who">${g.nombre}</span><span class="total">${totalAll.toFixed(2)}<span> h totales</span></span>`;
+
+  const cards = Object.entries(totals)
+    .sort((a, b) => b[1] - a[1])
+    .map(([cliente, horas]) => {
+      const pct = totalAll > 0 ? (horas / totalAll * 100) : 0;
+      return `
+      <div class="ph-card">
+        <div class="name">${escapeHtml(cliente)}</div>
+        <div class="hrs-row">
+          <span class="hrs">${horas.toFixed(2)}<span> h</span></span>
+          <span class="pct">${pct.toFixed(0)}%</span>
+        </div>
+        <div class="ph-bar-track"><div class="ph-bar-fill" style="width:${pct.toFixed(1)}%"></div></div>
+      </div>`;
+    }).join('');
+
+  wrap.innerHTML = cards;
+}
+
+function getFilteredEntries() {
+  const fg = document.getElementById('ph-filter-grafista').value;
+  const fc = document.getElementById('ph-filter-cliente').value;
+  const fd = document.getElementById('ph-filter-desde').value;
+  const fh = document.getElementById('ph-filter-hasta').value;
+
+  return entries.filter(e => {
+    if (fg !== 'todos' && e.grafista !== fg) return false;
+    if (fc !== 'todos' && e.cliente !== fc) return false;
+    if (fd && e.fecha < fd) return false;
+    if (fh && e.fecha > fh) return false;
+    return true;
+  }).sort((a, b) => b.fecha.localeCompare(a.fecha));
+}
+
+function renderTable() {
+  const wrap = document.getElementById('ph-table-wrap');
+  const filtered = getFilteredEntries();
+
+  if (filtered.length === 0) {
+    wrap.innerHTML = '<div class="ph-empty">No hay registros con estos filtros.</div>';
+    return;
+  }
+
+  const total = filtered.reduce((s, e) => s + Number(e.horas), 0);
+
+  const rows = filtered.map(e => {
+    const g = GRAFISTAS.find(x => x.id === e.grafista);
+    return `
+      <tr data-id="${e.id}">
+        <td class="ph-mono">${e.fecha}</td>
+        <td><span class="ph-person-dot" style="background:${COLOR_HEX[e.grafista]}"></span>${g ? g.nombre : e.grafista}</td>
+        <td>${escapeHtml(e.cliente)}</td>
+        <td class="ph-mono">${Number(e.horas).toFixed(2)}</td>
+        <td>${escapeHtml(e.nota || '')}</td>
+        <td><button class="ph-del" data-id="${e.id}" title="Eliminar">✕</button></td>
+      </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th><th>Grafista</th><th>Cliente</th><th>Horas</th><th>Nota</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+        <tr class="ph-total-row">
+          <td colspan="3">Total filtrado</td>
+          <td class="ph-mono">${total.toFixed(2)}</td>
+          <td colspan="2"></td>
+        </tr>
+      </tbody>
+    </table>`;
+
+  wrap.querySelectorAll('.ph-del').forEach(btn => {
+    btn.onclick = async () => {
+      try {
+        await deleteDoc(doc(db, 'entries', btn.getAttribute('data-id')));
+      } catch (e) {
+        console.error('No se pudo eliminar', e);
+      }
+    };
+  });
+}
+
+function render() {
+  buildTabs();
+  updateClientDatalist();
+  updateFilterOptions();
+  renderSummary();
+  renderTable();
+}
+
+async function addEntry() {
+  const fecha = document.getElementById('ph-fecha').value;
+  const cliente = document.getElementById('ph-cliente').value.trim();
+  const horas = document.getElementById('ph-horas').value;
+  const nota = document.getElementById('ph-nota').value.trim();
+
+  if (!fecha || !cliente || !horas || Number(horas) <= 0) {
+    return;
+  }
+
+  try {
+    await addDoc(entriesCol, {
+      grafista: currentGrafista,
+      fecha,
+      cliente,
+      horas: Number(horas),
+      nota,
+      creado: Date.now(),
+    });
+  } catch (e) {
+    console.error('No se pudo guardar', e);
+    return;
+  }
+
+  document.getElementById('ph-cliente').value = '';
+  document.getElementById('ph-horas').value = '';
+  document.getElementById('ph-nota').value = '';
+}
+
+function init() {
+  buildRuler();
+  document.getElementById('ph-fecha').value = todayISO();
+  root.style.setProperty('--accent', COLOR_HEX[currentGrafista]);
+
+  if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'TU_API_KEY') {
+    showConfigError();
+    return;
+  }
+
+  try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    entriesCol = collection(db, 'entries');
+  } catch (e) {
+    showConfigError();
+    return;
+  }
+
+  document.getElementById('ph-add-btn').onclick = addEntry;
+  document.getElementById('ph-cliente').addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
+  document.getElementById('ph-horas').addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
+  document.getElementById('ph-nota').addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
+
+  ['ph-filter-grafista', 'ph-filter-cliente', 'ph-filter-desde', 'ph-filter-hasta'].forEach(id => {
+    document.getElementById(id).addEventListener('change', renderTable);
+  });
+
+  onSnapshot(entriesCol, snapshot => {
+    entries = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    render();
+    document.getElementById('ph-loading').style.display = 'none';
+    document.getElementById('ph-app').style.display = 'block';
+  }, error => {
+    console.error(error);
+    showConfigError();
+  });
+}
+
+init();
+</script>
