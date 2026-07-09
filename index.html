@@ -211,6 +211,10 @@ body { padding: 12px; }
   color: var(--ink);
   width: 100%;
   min-width: 0;
+  height: 42px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
 }
 #ph-root input:focus, #ph-root select:focus {
   outline: 2px solid var(--accent);
@@ -384,6 +388,7 @@ body { padding: 12px; }
   #ph-root .ph-form {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 12px;
+    align-items: start;
     background: var(--paper-card);
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -444,7 +449,7 @@ body { padding: 12px; }
   #ph-root .ph-total-row { background: var(--accent-soft); border: 1px solid var(--accent); }
   #ph-root .ph-total-row td { font-weight: 700; border-top: none; border-bottom: none; }
   #ph-root .ph-add-btn { padding: 13px 18px; font-size: 14px; }
-  #ph-root input, #ph-root select { padding: 11px 10px; font-size: 16px; }
+  #ph-root input, #ph-root select { padding: 11px 10px; font-size: 16px; height: 46px; }
 }
 
 @media (max-width: 400px) {
