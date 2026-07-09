@@ -237,6 +237,32 @@ body { padding: 12px; }
 #ph-root .ph-add-btn:hover { filter: brightness(1.08); }
 #ph-root .ph-add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* autocompletado de cliente */
+#ph-root .ph-suggestions {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--paper-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 30;
+  box-shadow: 0 6px 16px rgba(27, 43, 41, 0.12);
+}
+#ph-root .ph-suggestions.show { display: block; }
+#ph-root .ph-suggestions .item {
+  padding: 9px 12px;
+  font-size: 13.5px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--line);
+}
+#ph-root .ph-suggestions .item:last-child { border-bottom: none; }
+#ph-root .ph-suggestions .item:hover,
+#ph-root .ph-suggestions .item.active { background: var(--accent-soft); }
+
 /* summary cards */
 #ph-root .ph-summary-top {
   display: flex;
@@ -479,10 +505,10 @@ body { padding: 12px; }
           <label>Fecha</label>
           <input type="date" id="ph-fecha" />
         </div>
-        <div class="ph-field">
+        <div class="ph-field" style="position: relative;">
           <label>Cliente</label>
-          <input type="text" id="ph-cliente" list="ph-clientes-list" placeholder="Nombre del cliente" />
-          <datalist id="ph-clientes-list"></datalist>
+          <input type="text" id="ph-cliente" placeholder="Nombre del cliente" autocomplete="off" />
+          <div id="ph-cliente-suggestions" class="ph-suggestions"></div>
         </div>
         <div class="ph-field">
           <label>Horas</label>
@@ -592,9 +618,38 @@ function uniqueClients() {
   return [...new Set(entries.map(e => e.cliente))].sort((a, b) => a.localeCompare(b));
 }
 
-function updateClientDatalist() {
-  const dl = document.getElementById('ph-clientes-list');
-  dl.innerHTML = uniqueClients().map(c => `<option value="${escapeHtml(c)}">`).join('');
+function showClientSuggestions() {
+  const input = document.getElementById('ph-cliente');
+  const box = document.getElementById('ph-cliente-suggestions');
+  const val = input.value.trim().toLowerCase();
+  const clients = uniqueClients();
+  const matches = (val ? clients.filter(c => c.toLowerCase().includes(val)) : clients).slice(0, 8);
+
+  if (matches.length === 0) {
+    box.classList.remove('show');
+    box.innerHTML = '';
+    return;
+  }
+
+  box.innerHTML = matches.map(c => `<div class="item">${escapeHtml(c)}</div>`).join('');
+  box.classList.add('show');
+
+  box.querySelectorAll('.item').forEach(el => {
+    el.addEventListener('mousedown', (e) => { e.preventDefault(); });
+    el.addEventListener('click', () => {
+      input.value = el.textContent;
+      box.classList.remove('show');
+    });
+    el.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      input.value = el.textContent;
+      box.classList.remove('show');
+    });
+  });
+}
+
+function hideClientSuggestions() {
+  document.getElementById('ph-cliente-suggestions').classList.remove('show');
 }
 
 function updateFilterOptions() {
@@ -725,7 +780,6 @@ function renderTable() {
 
 function render() {
   buildTabs();
-  updateClientDatalist();
   updateFilterOptions();
   renderSummary();
   renderTable();
@@ -783,6 +837,10 @@ function init() {
   document.getElementById('ph-cliente').addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
   document.getElementById('ph-horas').addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
   document.getElementById('ph-nota').addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
+
+  document.getElementById('ph-cliente').addEventListener('focus', showClientSuggestions);
+  document.getElementById('ph-cliente').addEventListener('input', showClientSuggestions);
+  document.getElementById('ph-cliente').addEventListener('blur', () => setTimeout(hideClientSuggestions, 150));
 
   ['ph-filter-grafista', 'ph-filter-cliente', 'ph-filter-desde', 'ph-filter-hasta'].forEach(id => {
     document.getElementById(id).addEventListener('change', renderTable);
