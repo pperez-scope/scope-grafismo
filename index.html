@@ -1,5 +1,15 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parte de horas · Scope Producciones</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+html, body { margin: 0; padding: 0; background: #F6FAF9; }
+body { padding: 12px; }
+@media (min-width: 700px) { body { padding: 32px 16px; } }
 
 #ph-root {
   --paper: #F6FAF9;
@@ -372,10 +382,26 @@
   #ph-root .ph-form { grid-template-columns: 1fr 1fr; }
   #ph-root .ph-form .ph-field:nth-child(4) { grid-column: 1 / -1; }
   #ph-root .ph-add-btn { grid-column: 1 / -1; }
-  #ph-root .ph-header, #ph-root .ph-body, #ph-root .ph-tabs { padding-left: 18px; padding-right: 18px; }
-  #ph-root .ph-ruler { padding: 0 18px; }
+  #ph-root .ph-header, #ph-root .ph-body, #ph-root .ph-tabs { padding-left: 16px; padding-right: 16px; }
+  #ph-root .ph-ruler { padding: 0 16px; }
+  #ph-root .ph-title { font-size: 22px; }
+  #ph-root .ph-summary { grid-template-columns: 1fr 1fr; }
+  #ph-root .ph-summary-top { flex-direction: column; align-items: flex-start; gap: 4px; }
+  #ph-root .ph-filters { flex-direction: column; }
+  #ph-root .ph-filters select, #ph-root .ph-filters input { width: 100%; }
+  #ph-root .ph-tab { padding: 12px 12px 10px 12px; font-size: 13px; flex: 1; justify-content: center; }
+  #ph-root .ph-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -16px; padding: 0 16px; }
+  #ph-root table { min-width: 560px; }
+  #ph-root .ph-add-btn { padding: 13px 18px; font-size: 14px; }
+  #ph-root input, #ph-root select { padding: 11px 10px; font-size: 16px; }
+}
+
+@media (max-width: 400px) {
+  #ph-root .ph-summary { grid-template-columns: 1fr; }
 }
 </style>
+</head>
+<body>
 
 <div id="ph-root">
   <div id="ph-loading" class="ph-loading">Conectando con la base de datos…</div>
@@ -612,6 +638,7 @@ function renderTable() {
   }).join('');
 
   wrap.innerHTML = `
+    <div class="ph-table-scroll">
     <table>
       <thead>
         <tr>
@@ -626,7 +653,8 @@ function renderTable() {
           <td colspan="2"></td>
         </tr>
       </tbody>
-    </table>`;
+    </table>
+    </div>`;
 
   wrap.querySelectorAll('.ph-del').forEach(btn => {
     btn.onclick = async () => {
@@ -717,3 +745,6 @@ function init() {
 
 init();
 </script>
+
+</body>
+</html>
