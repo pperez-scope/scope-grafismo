@@ -379,9 +379,19 @@ body { padding: 12px; }
 #ph-root .ph-config-error { color: var(--joan); }
 
 @media (max-width: 640px) {
-  #ph-root .ph-form { grid-template-columns: 1fr 1fr; }
-  #ph-root .ph-form .ph-field:nth-child(4) { grid-column: 1 / -1; }
-  #ph-root .ph-add-btn { grid-column: 1 / -1; }
+  #ph-root .ph-form {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 14px;
+  }
+  #ph-root .ph-form .ph-field:nth-child(1) { order: 1; }
+  #ph-root .ph-form .ph-field:nth-child(3) { order: 2; }
+  #ph-root .ph-form .ph-field:nth-child(2) { order: 3; grid-column: 1 / -1; }
+  #ph-root .ph-form .ph-field:nth-child(4) { order: 4; grid-column: 1 / -1; }
+  #ph-root .ph-add-btn { order: 5; grid-column: 1 / -1; width: 100%; padding: 14px; font-size: 15px; margin-top: 2px; }
   #ph-root .ph-header, #ph-root .ph-body, #ph-root .ph-tabs { padding-left: 16px; padding-right: 16px; }
   #ph-root .ph-ruler { padding: 0 16px; }
   #ph-root .ph-title { font-size: 22px; }
