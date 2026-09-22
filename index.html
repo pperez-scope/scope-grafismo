@@ -243,6 +243,32 @@ body { padding: 12px; }
 #ph-root .ph-add-btn:hover { filter: brightness(1.08); }
 #ph-root .ph-add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+#ph-root .ph-edit-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--joan-soft);
+  border: 1px solid var(--joan);
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+#ph-root .ph-edit-banner button {
+  background: none;
+  border: 1px solid var(--joan);
+  color: var(--joan);
+  font-weight: 700;
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+#ph-root .ph-edit-banner button:hover { background: var(--joan); color: #fff; }
+
 /* autocompletado de cliente */
 #ph-root .ph-suggestions {
   display: none;
@@ -389,7 +415,8 @@ body { padding: 12px; }
   border-radius: 50%;
   margin-right: 6px;
 }
-#ph-root .ph-del {
+#ph-root .ph-actions { display: flex; gap: 4px; justify-content: flex-end; }
+#ph-root .ph-del, #ph-root .ph-edit {
   background: none;
   border: none;
   color: var(--ink-soft);
@@ -399,6 +426,7 @@ body { padding: 12px; }
   border-radius: var(--radius);
 }
 #ph-root .ph-del:hover { color: var(--joan); background: var(--joan-soft); }
+#ph-root .ph-edit:hover { color: var(--santi); background: var(--santi-soft); }
 
 #ph-root .ph-total-row td {
   font-weight: 700;
@@ -505,7 +533,11 @@ body { padding: 12px; }
     <div class="ph-tabs" id="ph-tabs"></div>
     <div class="ph-body">
 
-      <p class="ph-section-label">Nueva entrada</p>
+      <p class="ph-section-label" id="ph-form-label">Nueva entrada</p>
+      <div id="ph-edit-banner" class="ph-edit-banner" style="display:none;">
+        Editando un registro existente
+        <button type="button" id="ph-cancel-edit">Cancelar</button>
+      </div>
       <div class="ph-form">
         <div class="ph-field">
           <label>Fecha</label>
@@ -550,7 +582,7 @@ body { padding: 12px; }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot
+  getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* =====================================================================
@@ -579,6 +611,7 @@ const COLOR_HEX = { santi: '#2E7D74', joan: '#E2582B', marta: '#C16A3E' };
 let entries = [];
 let currentGrafista = 'santi';
 let db, entriesCol;
+let editingId = null;
 const root = document.getElementById('ph-root');
 
 function todayISO() {
@@ -750,7 +783,10 @@ function renderTable() {
         <td data-label="Cliente">${escapeHtml(e.cliente)}</td>
         <td class="ph-mono" data-label="Horas">${Number(e.horas).toFixed(2)}</td>
         <td data-label="Nota">${escapeHtml(e.nota || '')}</td>
-        <td data-label=""><button class="ph-del" data-id="${e.id}" title="Eliminar">✕</button></td>
+        <td data-label="" class="ph-actions">
+          <button class="ph-edit" data-id="${e.id}" title="Editar">✎</button>
+          <button class="ph-del" data-id="${e.id}" title="Eliminar">✕</button>
+        </td>
       </tr>`;
   }).join('');
 
@@ -777,10 +813,15 @@ function renderTable() {
     btn.onclick = async () => {
       try {
         await deleteDoc(doc(db, 'entries', btn.getAttribute('data-id')));
+        if (editingId === btn.getAttribute('data-id')) cancelEdit();
       } catch (e) {
         console.error('No se pudo eliminar', e);
       }
     };
+  });
+
+  wrap.querySelectorAll('.ph-edit').forEach(btn => {
+    btn.onclick = () => startEdit(btn.getAttribute('data-id'));
   });
 }
 
@@ -789,6 +830,38 @@ function render() {
   updateFilterOptions();
   renderSummary();
   renderTable();
+}
+
+function startEdit(id) {
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+
+  editingId = id;
+  currentGrafista = e.grafista;
+  root.style.setProperty('--accent', COLOR_HEX[e.grafista]);
+
+  document.getElementById('ph-fecha').value = e.fecha;
+  document.getElementById('ph-cliente').value = e.cliente;
+  document.getElementById('ph-horas').value = e.horas;
+  document.getElementById('ph-nota').value = e.nota || '';
+
+  document.getElementById('ph-form-label').textContent = 'Editar entrada';
+  document.getElementById('ph-edit-banner').style.display = 'flex';
+  document.getElementById('ph-add-btn').textContent = 'Guardar cambios';
+
+  buildTabs();
+  document.getElementById('ph-fecha').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelEdit() {
+  editingId = null;
+  document.getElementById('ph-fecha').value = todayISO();
+  document.getElementById('ph-cliente').value = '';
+  document.getElementById('ph-horas').value = '';
+  document.getElementById('ph-nota').value = '';
+  document.getElementById('ph-form-label').textContent = 'Nueva entrada';
+  document.getElementById('ph-edit-banner').style.display = 'none';
+  document.getElementById('ph-add-btn').textContent = '+ Añadir';
 }
 
 async function addEntry() {
@@ -802,22 +875,35 @@ async function addEntry() {
   }
 
   try {
-    await addDoc(entriesCol, {
-      grafista: currentGrafista,
-      fecha,
-      cliente,
-      horas: Number(horas),
-      nota,
-      creado: Date.now(),
-    });
+    if (editingId) {
+      await updateDoc(doc(db, 'entries', editingId), {
+        grafista: currentGrafista,
+        fecha,
+        cliente,
+        horas: Number(horas),
+        nota,
+      });
+    } else {
+      await addDoc(entriesCol, {
+        grafista: currentGrafista,
+        fecha,
+        cliente,
+        horas: Number(horas),
+        nota,
+        creado: Date.now(),
+      });
+    }
   } catch (e) {
     console.error('No se pudo guardar', e);
     return;
   }
 
+  const wasEditing = !!editingId;
   document.getElementById('ph-cliente').value = '';
   document.getElementById('ph-horas').value = '';
   document.getElementById('ph-nota').value = '';
+
+  if (wasEditing) cancelEdit();
 }
 
 function init() {
@@ -840,6 +926,7 @@ function init() {
   }
 
   document.getElementById('ph-add-btn').onclick = addEntry;
+  document.getElementById('ph-cancel-edit').onclick = cancelEdit;
   document.getElementById('ph-cliente').addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
   document.getElementById('ph-horas').addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
   document.getElementById('ph-nota').addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
